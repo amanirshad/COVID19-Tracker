@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">COVID19-Tracker</string>
+    <string name="country_name">Enter the name of your country</string>
 </resources>
