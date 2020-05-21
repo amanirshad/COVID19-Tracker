@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +18,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.DefaultSliderView;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderLayout;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
         seeDetails = findViewById(R.id.btn_see_details);
 
+        countryName = findViewById(R.id.country);
+
+        seeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar snackbar = Snackbar.make(view, "Under Progress" ,Snackbar.LENGTH_LONG);
+            }
+        });
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 assert connectivityManager != null;
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
-                        new searchData.execute();
+                        new searchData().execute();
                 } else {
                     Snackbar snackbar = Snackbar.make(view, "No internet Connection", Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -91,11 +112,54 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     public class searchData extends AsyncTask<String, Void, String>{
+
+        String COUNTRY = countryNameEditText.getText().toString();
 
         @Override
         protected String doInBackground(String... strings) {
+            OkHttpClient client = new OkHttpClient();
 
+            Request request = new Request.Builder()
+                    .url("https://covid-19-data.p.rapidapi.com/country?format=json&name=italy")
+                    .get()
+                    .addHeader("x-rapidapi-host", "covid-19-data.p.rapidapi.com")
+                    .addHeader("x-rapidapi-key", "846f0b2e4cmsh2b265530c750dcep19595fjsn16218e0b1879")
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+                if (jsonArray.length() >= 0){
+                    JSONObject main = jsonArray.getJSONObject(Integer.parseInt("0"));
+                    String country = main.getString("country");
+                    String confirmed = main.getString("confirmed");
+                    String recovered = main.getString("recovered");
+                    String deaths = main.getString("deaths");
+
+                    countryName.setText(country);
+                    confirmedCases.setText(confirmed);
+                    confirmedCases.setVisibility(View.VISIBLE);
+                    recoveredCases.setText(recovered);
+                    recoveredCases.setVisibility(View.VISIBLE);
+                    deathCases.setText(deaths);
+                    recoveredCases.setVisibility(View.VISIBLE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
