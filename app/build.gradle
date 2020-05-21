@@ -34,4 +34,8 @@ dependencies {
 
     //Addition for ImageSlider
     implementation 'com.github.smarteist:autoimageslider:1.2.0'
+
+    implementation 'com.google.android.material:material:1.1.0'
+
+    implementation "androidx.cardview:cardview:1.0.0"
 }
