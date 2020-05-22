@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#607D8B</color>
+    <color name="colorPrimaryDark">#455A64</color>
+    <color name="colorAccent">#FF5252</color>
 
     <color name="card_color_details">#455086</color>
+    <color name="slider_color">#25757A</color>
     <color name="doctor_contact">#0C2F58</color>
 
     <color name="white">#FFFFFF</color>

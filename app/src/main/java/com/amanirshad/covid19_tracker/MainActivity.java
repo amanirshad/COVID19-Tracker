@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar snackbar = Snackbar.make(view, "Under Progress" ,Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
 
