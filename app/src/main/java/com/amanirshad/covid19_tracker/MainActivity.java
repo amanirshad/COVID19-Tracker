@@ -123,19 +123,19 @@ public class MainActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url("https://covid-19-data.p.rapidapi.com/country?format=json&name=italy")
+                    .url("https://covid-19-data.p.rapidapi.com/country?format=json&name=" + COUNTRY)
                     .get()
                     .addHeader("x-rapidapi-host", "covid-19-data.p.rapidapi.com")
                     .addHeader("x-rapidapi-key", "846f0b2e4cmsh2b265530c750dcep19595fjsn16218e0b1879")
                     .build();
-
+            String responseString = "";
             try {
                 Response response = client.newCall(request).execute();
-                return response.body().string();
+                responseString = response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return responseString;
         }
 
         @Override
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     recoveredCases.setText(recovered);
                     recoveredCases.setVisibility(View.VISIBLE);
                     deathCases.setText(deaths);
-                    recoveredCases.setVisibility(View.VISIBLE);
+                    deathCases.setVisibility(View.VISIBLE);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
